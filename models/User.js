@@ -3,6 +3,20 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
+    usuario: {
+        type: String,
+        required: true,
+        required: true
+        } 
+    ,
+    coreo: {
+        type: String,
+        trim: true,
+        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g],
+        required: true,
+        unique: true,
+        index: true
+    },
     nombre: {
         type: String,
         default: "Nombre no especificado",
@@ -10,43 +24,18 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         minLength: 2
     },
-    correo: {
-        type: String,
-        trim: true,
-        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g],
-        required: true
-    },
-    correo: {
-        type: String,
-        trim: true,
-        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g],
-        required: true
-    },
-    age: {
-        type: Number,
-        min: 16,
-        max: 120
-    },
     password: {
         type: String,
         match: [/^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$/gm],
         required: true
     },
-    salt: String,
-    isAdmin: {
-        type: Boolean,
-        default: false
+    salt: {
+        type: String
     },
     rut: {
         type: String
     },
-    calle: {
-        type: String
-    },
-    numero: {
-        type: String
-    },
-    depto: {
+    direccion: {
         type: String
     },
     comuna: {
@@ -55,12 +44,19 @@ const userSchema = new mongoose.Schema({
     ciudad: {
         type: String
     },
-    fecharegistro: {
-        type: String
-    },
-    favoriteProducts: {
+    productosFavoritoss: {
         type: mongoose.Types.ObjectId,
         ref: "product"
+    },
+    isPremium: {
+        type: Boolean,
+        require: true,
+        default: false
+    },
+    isAdmin: {
+        type: Boolean,
+        require: true,
+        default: false
     }
 })
 
@@ -71,7 +67,8 @@ userSchema.methods.hashPassword = function (password) {
 
 
 userSchema.methods.hashValidation = function (password, salt, passwordDB) {
-    const hash = crypto.pbkdf2Sync(password, salt, 5000, 10, 'sha-512').toString('hex')
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha-512').toString('hex');
+  //clase  const hash = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('hex')
     return hash === passwordDB;
 }
 

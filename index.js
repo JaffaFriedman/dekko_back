@@ -5,13 +5,19 @@ const orderRouter = require("./routes/orderRoutes");
 
 require('dotenv').config();
 require('./config/database');
-
+const cors=requiere(cors);
 const app = express();
+
+app.listen(process.env.PORT, () => console.log(`Servidor conectado en puerto: ${process.env.PORT}`))
+const corsOptions={
+    origin:process.env.FRONTEND_URL,
+    optionesSuccessStatus:200
+}
+
 app.use(express.json());
 app.use(userRouter);
 app.use(productRouter);
 app.use(orderRouter);
-app.listen(process.env.PORT, () => console.log(`Servidor conectado en puerto: ${process.env.PORT}`))
 
 /* Clase 
 

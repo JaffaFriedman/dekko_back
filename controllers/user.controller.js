@@ -32,6 +32,17 @@ const getUsers = async (req, res) => {
     }
 }
 
+const getUser = async (req, res) => {
+    try {
+
+        const { correo  } = req.body;
+        console.log(correo , req.body)
+        const user = await User.findOne({ correo })
+        res.json({ success: true, info: user })
+    } catch (error) {
+        res.json({ success: false, message: error.message })
+    }
+}
 
 const editUser = async (req, res) => {
 
@@ -45,9 +56,7 @@ const editUser = async (req, res) => {
         const updateUser = await User.findByIdAndUpdate(id, {
             nombre: contain.nombre,
             telefono: contain.telefono,
-            calle: contain.calle,
-            numero: contain.numero,
-            depto: contain.depto,
+            direccion: contain.direccion,
             comuna: contain.comuna,
             ciudad: contain.ciudad
         });
@@ -126,4 +135,4 @@ const getUserVerify = async (req, res) => {
 }
 
 
-module.exports = { createUser, getUsers, editUser, deleteUser, login, getUserVerify, updatePassword };
+module.exports = { createUser, getUsers, getUser, editUser, deleteUser, login, getUserVerify, updatePassword };
