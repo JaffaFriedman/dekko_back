@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers, getUser, editUser, deleteUser, login, getUserVerify, updatePassword } = require('../controllers/user.controller')
+const { createUser, getUsers, getUserById, editUser, deleteUser, login, getUserVerify, updatePassword } = require('../controllers/user.controller')
 const auth = require('../middleware/auth')
 
 const userRouter = express.Router();
@@ -11,11 +11,8 @@ userRouter.route('/user')
 
 userRouter.route('/user/:id')
     .delete(deleteUser)
-
-userRouter.route('/user/:correo')
-    .get(getUser)
+    .get(getUserById)
  
-
 userRouter.route('/user/signin')
     .post(login)
     .put(updatePassword)
@@ -25,5 +22,7 @@ userRouter.route('/user/verifyUser')
 
 userRouter.route('/user/myProfile')
     .put(auth, editUser)
+
+userRouter.get('/:_id', auth, 'getUserById')
 
 module.exports = userRouter;
