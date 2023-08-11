@@ -2,20 +2,26 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+
+  
+  
 const userSchema = new mongoose.Schema({
-    usuario: {
-        type: String,
-        required: true,
-        required: true
-        } 
-    ,
-    coreo: {
+    correo: {
         type: String,
         trim: true,
         match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g],
-        required: true,
-        unique: true,
-        index: true
+        required: true
+    },
+    password: {
+        type: String,
+        match: [/^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$/gm],
+        required: true
+    },
+    rut: {
+        type: String
+    },
+    direccion: {
+        type: String
     },
     nombre: {
         type: String,
@@ -24,64 +30,65 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         minLength: 2
     },
-    password: {
-        type: String,
-        match: [/^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$/gm],
-        required: true
-    },
-    salt: {
-        type: String
-    },
-    rut: {
-        type: String
-    },
-    direccion: {
-        type: String
-    },
     comuna: {
         type: String
     },
-    ciudad: {
-        type: String
+    telefono: {
+        match: [/^\d{9}$/],
+        type: number
     },
-    productosFavoritoss: {
-        type: mongoose.Types.ObjectId,
-        ref: "product"
-    },
-    isPremium: {
-        type: Boolean,
-        require: true,
-        default: false
-    },
+    salt: String,
     isAdmin: {
         type: Boolean,
-        require: true,
         default: false
+    },
+    fecharegistro: {
+        type: String
+    },
+    favoriteProducts: {
+        type: mongoose.Types.ObjectId,
+        ref: "product"
     }
 })
 
-userSchema.methods.hashPassword = function (password) {
-    this.salt = crypto.randomBytes(10).toString('hex');
+userSchema.methods.hashPassword = function(password){
+    this.salt = crypto.randomBytes(10).toString('hex'); 
     this.password = crypto.pbkdf2Sync(password, this.salt, 5000, 10, 'sha-512').toString('hex');
 }
 
 
-userSchema.methods.hashValidation = function (password, salt, passwordDB) {
-    const hash = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha-512').toString('hex');
-  //clase  const hash = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('hex')
+userSchema.methods.hashValidation = function(password, salt, passwordDB){
+    const hash = crypto.pbkdf2Sync(password, salt, 5000, 10, 'sha-512').toString('hex')
     return hash === passwordDB;
 }
 
-userSchema.methods.generateToken = function () {
+userSchema.methods.generateToken = function(){
     const payload = {
         id: this._id,
         correo: this.correo
     }
-    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: 900000 })
+    const token = jwt.sign(payload, process.env.SECRET, {expiresIn: 900000})
     return token;
 }
 
-
+userSchema.methods.validaRut= function validarModulo11(numero) {
+    let suma = 0;
+    let pesos = [2, 3, 4, 5, 6, 7, 8, 9];
+  
+    for (let i = 0; i < numero.length - 1; i++) {
+      suma += numero[numero.length - 2 - i] * pesos[i % pesos.length];
+    }
+  
+    let residuo = suma % 11;
+    let digitoVerificador = 11 - residuo;
+  
+    if (digitoVerificador === 10) {
+      digitoVerificador = 'K';
+    } else if (digitoVerificador === 11) {
+      digitoVerificador = '0';
+    }
+      return digitoVerificador.toString().toUpperCase() === numero[numero.length - 1].toUpperCase();
+  }
 const User = mongoose.model('user', userSchema);
 
 module.exports = User;

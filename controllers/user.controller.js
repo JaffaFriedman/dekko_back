@@ -42,7 +42,7 @@ const getUserById = async (req, res) => {
     if (user) {
       res.json({ success: false, message: error.message })
     }
-    else {return res.status(404).json({ message: 'no encontrado' });}
+    else { return res.status(404).json({ message: 'no encontrado' }); }
   } catch (error) {
     res.json({ success: false, message: error.message })
   }

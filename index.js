@@ -2,22 +2,22 @@ const express = require("express");
 
 require('dotenv').config();
 require('./config/database');
-
-const cors = require('cors');
-const app = express();
-
-app.use(cors);
-
 const userRouter = require("./routes/userRoutes");
 const productRouter = require('./routes/productRoutes')
 const orderRouter = require("./routes/orderRoutes");
+const app = express();
+ 
 
+app.listen(process.env.PORT, () => console.log(`Servidor conectado en puerto: ${process.env.PORT}`))
+
+const cors = require('cors');
 const   corsOptions={
     origin:process.env.FRONTEND_URL,
     optionesSuccessStatus:200
 }
+app.use(cors(corsOptions));
 
-app.listen(process.env.PORT, () => console.log(`Servidor conectado en puerto: ${process.env.PORT}`))
+
 app.use(express.json());
 app.use(userRouter);
 app.use(productRouter);

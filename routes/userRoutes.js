@@ -11,6 +11,9 @@ userRouter.route('/user')
 
 userRouter.route('/user/:id')
     .delete(deleteUser)
+  
+
+userRouter.route('/user/:id', auth) 
     .get(getUserById)
  
 userRouter.route('/user/signin')
@@ -23,6 +26,7 @@ userRouter.route('/user/verifyUser')
 userRouter.route('/user/myProfile')
     .put(auth, editUser)
 
-userRouter.get('/:_id', auth, 'getUserById')
+
+//userRouter.get('/:_id', auth, 'getUserById')
 
 module.exports = userRouter;
