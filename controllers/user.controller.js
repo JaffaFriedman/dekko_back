@@ -1,145 +1,215 @@
+const mongoose = require('mongoose')
+const generateToken = require('../helpers/generateToken')
+const hashPassword = require('../helpers/hashPassword')
 
-//* importacion de la Referencia sobre la coleccion con su esquema determinado.
-const User = require('../models/User');
-const crypto = require('crypto');
+const User = mongoose.model('user')
 
+const signUp = async (req, res) => {
+  const {
+    username,
+    password,
+    email,
+    phone,
+    rol,
+    calle,
+    numero,
+    depto,
+    comuna,
+    premium,
+    dob
+  } = req.body
+  const emailLowerCase = email.toLowerCase()
+  const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
-
-const createUser = async(req, res) => {
-    try {
-        const userCorreo = await User.findOne({ correo: req.body.correo })
-        if(userCorreo) {
-            throw new Error('correo en uso!!!')
-        }
-        //* Guardar informacion en mi base de datos
-        const newUser = new User(req.body);
-        newUser.hashPassword(req.body.password);
-        await newUser.save();
-        res.json({success: true, message: "Usuario Creado", info: newUser._id, token: newUser.generateToken()})
-    } catch (error) {
-        res.json({success: false, message: error.message})
-    }
-}
-
-
-const getUsers = async(req, res) => {
-    try {
-        //const users = await User.find().populate('favoriteProducts');
-        const users = await User.find();
-        res.json({success: true, info: users })
-    } catch (error) {
-        res.json({success: false, message: error.message})
-    }
-}
-
- 
-const editUser = async(req, res) => {
-
-    try {
-        // throw new Error('error forzado')
-        const {id} = req.auth;
-        const contain = req.body;
- 
-        const usuario = await User.find({ correo: contain.correo})
- 
-        const updateUser = await User.findByIdAndUpdate(id,  {
-            nombre: contain.nombre,
-            telefono: contain.telefono,
-            calle: contain.calle,
-            numero: contain.numero,
-            depto: contain.depto,
-            comuna: contain.comuna,
-            ciudad: contain.ciudad
-        });
-        res.json({success: true, msg: "usuario actualizado", updateUser})
-
-    } catch (error) {
-        res.status(500).json({success: false, message: error.message})
-    }
-}
-
-const updatePassword = async(req, res) => {
-        try {
-            const {correo, password , npassword} = req.body;
-            const user = await User.findOne({ correo })
-            if(!user){
-                throw new Error('Usuario no registrado')
-            }
-            const validatePassword = user.hashValidation(password, user.salt, user.password)
-            if(!validatePassword){
-                throw new Error('Correo o contraseña incorrecta')
-            }
-            user.hashPassword(npassword);
-            let userid=user.id;
-            const updateUser = await User.findByIdAndUpdate( userid, {
-                password: user.password,
-                salt: user.salt
-            });
-            res.json({success: true, msg: 'Contraseña modificada con exito', token: user.generateToken()})
-        } catch (error) {
-            res.status(500).json({success: false, message: error.message})
-        }
-}
-
-
-const deleteUser =  async(req, res) => {
-    try {
-        const {_id} = req.params;
-        console.log(_id);
-        const destroyUser = await User.findByIdAndRemove(_id);
-        res.json({success: true, msg: "usuario eliminado", destroyUser})
-    } catch (error) {
-        res.status(500).json({success: false, message: error.message})
-    }
-}
-
-const login = async(req, res) => {
-    try {
-        const { correo, password } = req.body;
-        console.log(correo, password,req.body )
-        const user = await User.findOne({ correo })
-        console.log(user)
-        if(!user){
-            throw new Error('Usuario no registrado!!!')
-        }
-        const validatePassword = user.hashValidation(password, user.salt, user.password)
-        if(!validatePassword){
-            throw new Error('correo o contraseña incorrecta!!!')
-        }
-        res.json({success: true, msg: 'Has iniciado sesion', token: user.generateToken()})
-    } catch (error) {
-        res.status(500).json({success: false, message: error.message})
-    }
-}
-
-
-const getUserVerify = async(req, res) => {
-    try {
-        const {_id } = req.auth
-       // const user = await User.findById(id).populate('favoriteProducts').select('-password -salt');
-        const user = await User.findById(_id).select('-password -salt');
-        res.json({success: true, msg: `Informacion de: ${user.correo}`, info: user })
-
-    } catch (error) {
-        res.status(500).json({success: false, message: error.message})
-    }
-}
-
-const getUserById = async (req, res) => {
-
-    try {
-      const { _id } = req.params
-      const user = await User.findOne({ _id })
-      res.json({ success: true, info: user })
-      if (user) {
-        return res.status(200).json({message:'ok', detail:user})
-        res.json({ success: false, message: error.message })
-      }
-      else { return res.status(404).json({ message: 'no encontrado' }); }
-    } catch (error) {
-      res.json({ success: false, message: error.message })
-    }
+  if (!regexPassword.test(password)) {
+    return res.status(401).json({
+      message:
+        'Singup :Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter'
+    })
   }
+  const hashedPassword = hashPassword(password)
+  try {
+    const user = new User({
+      username,
+      email: emailLowerCase,
+      password: hashedPassword,
+      phone,
+      rol,
+      calle,
+      numero,
+      depto,
+      comuna,
+      premium,
+      dob
+    })
+    const resp = await user.save()
+    const token = generateToken(resp)
+    return res.status(201).json({
+      message: 'signUp: Usuario Registrado',
+      token
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'signUp: Internal Server Error',
+      detail: error
+    })
+  }
+}
 
+const getUsers = async (req, res) => {
+  try {
+    const resp = await User.find()
+    return res.status(200).json({
+      message: 'getUsers: OK',
+      detail: resp
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'getUsers: Internal Server Error',
+      detail: error
+    })
+  }
+}
+const getUserById = async (req, res) => {
+  const { _id } = req.params
+  try {
+    const user = await User.findById( _id )
+    if (user) {
+      return res.status(200).json({
+        message: 'getUserById: Encontrado',
+        detail: user
+      })
+    }
+    return res.status(404).json({
+      message: 'getUserById: Not found'
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'getUserById: Server Error',
+      error
+    })
+  }
+}
+const updateUser = async (req, res) => {
+  const { _id, userUpdated } = req.body
+  console.log(_id, userUpdated)
+  try {
+    const resp = await User.findByIdAndUpdate(_id, userUpdated, { new: true })
+    if (resp) {
+      return res.status(200).json({
+        messege: 'updateUserById: ok',
+        detail: resp
+      })
+    }
+    return res.status(404).json({
+      message: 'updateUserById: Not found'
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'updateUser: Internal Server Error',
+      detail: error
+    })
+  }
+}
+const deleteUser = async (req, res) => {
+  const { _id } = req.body
+  console.log(_id)
+  try {
+    const resp = await User.findByIdAndDelete(_id)
+    return res.status(200).json({
+      messege: 'deleteUser: OK',
+      detail: resp
+    })
 
-module.exports = {createUser, getUsers, getUserById, editUser, deleteUser, login, getUserVerify, updatePassword};
+  } catch (error) {
+    return res.status(500).json({
+      message: 'deleteUser: Internal Server Error',
+      detail: error
+    })
+  }
+}
+
+const login = async (req, res) => {
+  const { email, password } = req.body
+  const emailLowerCase = email.toLowerCase()
+  const passwordHash = hashPassword(password)
+
+  try {
+    const userValidated = await User.findOne({ email: emailLowerCase })
+    if (!userValidated) {
+      return res.status(401).json({
+        message: 'login: Usuario no registrado'
+      })
+    }
+    console.log(`${userValidated.password} vs ${passwordHash}`)
+    if (userValidated.password === passwordHash) {
+      console.log(`coinciden`)
+      const token = generateToken(userValidated)
+      return res.status(200).json({
+        message: 'login: User logged in successfully',
+        userId: userValidated._id,
+        token
+      })
+    } else {
+      return res.status(401).json({
+        message: 'login: Invalid Password'
+      })
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: 'login: Server Error'
+    })
+  }
+}
+
+const deleteUserById = async (req, res) => {
+  const { _id } = req.params
+  try {
+    const resp = await User.findByIdAndDelete(_id)
+    if (resp) {
+      return res.status(200).json({
+        messege: 'deleteUserById: OK',
+        detail: resp
+      })
+    }
+    return res.status(404).json({
+      message: 'deleteUserById: Not found'
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'deleteUserById: Server Error',
+      error
+    })
+  }
+}
+
+const updateUserById = async (req, res) => {
+  const { _id, userUpdated } = req.params
+  try {
+    const resp = await User.findByIdAndUpdate(_id, userUpdated, { new: true })
+    if (resp) {
+      return res.status(200).json({
+        messege: 'updateUserById: ok',
+        detail: resp
+      })
+    }
+    return res.status(404).json({
+      message: 'updateUserById: Not found'
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'updateUserById: Server Error',
+      error
+    })
+  }
+}
+
+module.exports = {
+  signUp,
+  getUsers,
+  updateUser,
+  deleteUser,
+  login,
+  getUserById,
+  deleteUserById
+}
