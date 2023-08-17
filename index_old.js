@@ -8,9 +8,9 @@ const app = express();
 
 app.use(cors);
 
-const userRouter = require("./routes/User.Routes");
-const productRouter = require('./routes/Product.Routes')
-const orderRouter = require("./routes/Order.Routes");
+const userRouter = require("./routes/UserRoutes");
+const productRouter = require('./routes/ProductRoutes')
+const orderRouter = require("./routes/OrderRoutes");
 
 const   corsOptions={
     origin:process.env.FRONTEND_URL,

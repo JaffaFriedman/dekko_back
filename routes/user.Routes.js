@@ -10,7 +10,7 @@ const {
   login,
   getUserById,
   deleteUserById
-} = require('../controllers/User.Controllers')
+} = require('../controllers/UserControllers')
 
 const auth = require('../middlewares/auth')
 router.get('/', getUsers)

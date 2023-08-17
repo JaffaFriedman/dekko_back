@@ -1,8 +1,8 @@
 require('dotenv').config()
-require('./models/User.Models')
+require('./models/UserModels')
 
 const cors = require('cors')
-const userRoutes = require('./routes/User.Routes')
+const userRoutes = require('./routes/UserRoutes')
 
 const express = require('express')
 const app = express()
