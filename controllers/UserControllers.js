@@ -6,15 +6,14 @@ const User = mongoose.model('user')
 
 const signUp = async (req, res) => {
   const {
-    username,
-    password,
     email,
-    phone,
-    rol,
-    calle,
-    numero,
-    depto,
+    password,
+    nombre,
+    rut,
+    direccion,
     comuna,
+    telefono,
+    rol,
     premium,
     dob
   } = req.body
@@ -30,15 +29,14 @@ const signUp = async (req, res) => {
   const hashedPassword = hashPassword(password)
   try {
     const user = new User({
-      username,
       email: emailLowerCase,
       password: hashedPassword,
-      phone,
-      rol,
-      calle,
-      numero,
-      depto,
+      nombre,
+      rut,
+      direccion,
       comuna,
+      telefono,
+      rol,
       premium,
       dob
     })
@@ -92,7 +90,6 @@ const getUserById = async (req, res) => {
 }
 const updateUser = async (req, res) => {
   const { _id, userUpdated } = req.body
-  console.log(_id, userUpdated)
   try {
     const resp = await User.findByIdAndUpdate(_id, userUpdated, { new: true })
     if (resp) {
@@ -113,7 +110,7 @@ const updateUser = async (req, res) => {
 }
 const deleteUser = async (req, res) => {
   const { _id } = req.body
-  console.log(_id)
+
   try {
     const resp = await User.findByIdAndDelete(_id)
     return res.status(200).json({
@@ -141,9 +138,7 @@ const login = async (req, res) => {
         message: 'login: Usuario no registrado'
       })
     }
-    console.log(`${userValidated.password} vs ${passwordHash}`)
     if (userValidated.password === passwordHash) {
-      console.log(`coinciden`)
       const token = generateToken(userValidated)
       return res.status(200).json({
         message: 'login: User logged in successfully',
