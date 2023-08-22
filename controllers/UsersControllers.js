@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const generateToken = require('../helpers/generateToken')
 const hashPassword = require('../helpers/hashPassword')
 
-const User = mongoose.model('user')
+const User = mongoose.model('users')
 
 const signUp = async (req, res) => {
   const {
