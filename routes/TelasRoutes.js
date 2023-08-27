@@ -4,7 +4,6 @@ const telaRouter = express.Router()
 
 const { getTela,getTelas } = require('../controllers/TelasControllers')
 
-const auth = require('../middlewares/auth')
 
 telaRouter.route('/telas')
   .get(getTelas)

@@ -8,7 +8,7 @@ require('./models/ProductsModels')
 require('./models/TelasModels')
 require('./models/TexturasModels')
 require('./models/UsersModels')
-
+require('./models/ContactModels')
 const cors = require('cors')
 //Rutas
 
@@ -19,6 +19,8 @@ const productRoutes = require('./routes/ProductsRoutes')
 const telaRoutes = require('./routes/TelasRoutes')
 const texturaRoutes = require('./routes/TexturasRoutes')
 const userRoutes = require('./routes/UsersRoutes')
+const paymentRoutes=require('./routes/PaymentRoutes.js')
+const contactRoutes=require('./routes/ContactRoutes.js')
 
 const express = require('express')
 const app = express()
@@ -41,7 +43,36 @@ app.use(telaRoutes)
 app.use(texturaRoutes)
 app.use(userRoutes)
 app.use(orderRoutes)
+app.use(paymentRoutes)
+app.use(contactRoutes)
+
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    mensaje: "ruta get",
+  });
+});
+
+app.post("/", (req, res) => {
+  res.status(200).json({
+    mensaje: "ruta post",
+    detail: "",
+  });
+});
+
+app.put("/", (req, res) => {
+  res.status(200).json({
+    mensaje: "ruta put",
+  });
+});
+app.delete("/", (req, res) => {
+  res.status(200).json({
+    mensaje: "ruta delete",
+  });
+});
 
 app.listen(port, () => {
-  console.log(`eschuchando en el puerto ${port}`)
+  console.log(`eschuchando en el puerto ${port}`);
 });
+
+

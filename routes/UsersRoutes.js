@@ -5,8 +5,7 @@ const userRouter = express.Router()
 const {
   signUp,
   getUsers,
-  updateUser,
-  deleteUser,
+  updateUserById,
   login,
   getUserById,
   deleteUserById
@@ -15,11 +14,10 @@ const {
 const auth = require('../middlewares/auth')
 
 userRouter.get('/users', getUsers)
-userRouter.delete('/users', deleteUser)
 userRouter.post('/users', signUp)
 userRouter.post('/users/login', login)
 userRouter.get('/users/:_id', auth, getUserById)
-userRouter.put('/users/', updateUser)
+userRouter.put('/users/:_id', auth, updateUserById)
 userRouter.delete('users/:_id', auth, deleteUserById)
 
 module.exports = userRouter

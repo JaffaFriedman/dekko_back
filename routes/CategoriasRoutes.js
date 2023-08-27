@@ -8,7 +8,6 @@ const {
   getCategoria
 } = require('../controllers/CategoriasControllers')
 
-const auth = require('../middlewares/auth')
 
 categoriaRouter.route('/categorias')
   .get(getCategorias)

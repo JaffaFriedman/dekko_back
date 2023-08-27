@@ -14,11 +14,11 @@ const {
 const auth = require('../middlewares/auth')
 
 
-orderRouter.post('/', createOrder)
-orderRouter.get('/', getOrders)
-orderRouter.get('/:codigo', getOrderByCode)
-orderRouter.get('/:_id', getOrderById)
-orderRouter.post('/:_id', auth, updateOrder)
-orderRouter.delete('/:_id', auth, deleteOrder)
+orderRouter.post('/orders', createOrder)
+orderRouter.get('/orders', getOrders)
+orderRouter.get('/orders/:codigo', getOrderByCode)
+orderRouter.get('/orders/:_id', getOrderById)
+orderRouter.post('/orders/:_id', auth, updateOrder)
+orderRouter.delete('/orders/:_id', auth, deleteOrder)
 
 module.exports = orderRouter
