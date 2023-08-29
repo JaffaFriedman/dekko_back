@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Contact = mongoose.model('contacts')
 
 const clientContact = async (req, res) => {
-  const { email, nombre, rut, telefono, asunto, mensaje } = req.body
+  const { email, nombre, telefono, asunto, mensaje } = req.body
   const emailLowerCase = email.toLowerCase()
 
   try {
@@ -15,7 +15,7 @@ const clientContact = async (req, res) => {
       mensaje
     })
     return res.status(201).json({
-      message: 'clientContact: Contacto Registrado',
+      message: 'Te contactaremos a la brevedad',
       token
     })
   } catch (error) {

@@ -8,6 +8,6 @@ const {
 } = require('../controllers/ContactControllers')
 
 contactRouter.get('/contact', getContacts)
-contactRouter.post('/contact', clientContact)
+contactRouter.patch('/contact', clientContact)
 
 module.exports = contactRouter
