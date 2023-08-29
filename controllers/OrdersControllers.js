@@ -24,7 +24,7 @@ const updateOrder = async (req, res) => {
     const resp = await Order.findByIdAndUpdate(_id, OrderUpdated, { new: true })
     if (resp) {
       return res.status(200).json({
-        messege: 'updateOrder: ok',
+        message: 'updateOrder: ok',
         detail: resp
       })
     }
@@ -85,7 +85,7 @@ const deleteOrder = async (req, res) => {
   try {
     const resp = await Order.findByIdAndDelete(_id)
     return res.status(200).json({
-      messege: 'deleteOrder: OK',
+      message: 'deleteOrder: OK',
       detail: resp
     })
   } catch (error) {

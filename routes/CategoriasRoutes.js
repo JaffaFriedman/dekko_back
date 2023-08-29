@@ -3,7 +3,6 @@ const express = require('express')
 const categoriaRouter = express.Router()
 
 const {
-
   getCategorias,
   getCategoria
 } = require('../controllers/CategoriasControllers')

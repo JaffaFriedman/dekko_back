@@ -11,7 +11,6 @@ require('./models/UsersModels')
 require('./models/ContactModels')
 const cors = require('cors')
 //Rutas
-
 const categoriaRoutes = require('./routes/CategoriasRoutes')
 const familiaRoutes = require('./routes/FamiliasRoutes')
 const orderRoutes = require('./routes/OrdersRoutes')
@@ -65,6 +64,7 @@ app.put("/", (req, res) => {
     mensaje: "ruta put",
   });
 });
+
 app.delete("/", (req, res) => {
   res.status(200).json({
     mensaje: "ruta delete",

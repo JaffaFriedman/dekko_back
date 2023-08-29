@@ -16,8 +16,8 @@ const auth = require('../middlewares/auth')
 userRouter.get('/users', getUsers)
 userRouter.post('/users', signUp)
 userRouter.post('/users/login', login)
-userRouter.get('/users/:_id', auth, getUserById)
-userRouter.put('/users/:_id', auth, updateUserById)
-userRouter.delete('users/:_id', auth, deleteUserById)
+userRouter.get('/users/auth/:_id', auth, getUserById)
+userRouter.put('/users/auth/:_id', auth, updateUserById)
+userRouter.delete('/users/auth/:_id', auth, deleteUserById)
 
 module.exports = userRouter

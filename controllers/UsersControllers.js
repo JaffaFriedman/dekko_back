@@ -70,8 +70,9 @@ const getUsers = async (req, res) => {
 }
 const getUserById = async (req, res) => {
   const { _id } = req.params
+  console.log(_id)
   try {
-    const user = await User.findById( _id )
+     const user = await User.findById( _id )
     if (user) {
       return res.status(200).json({
         message: 'getUserById: Encontrado',
@@ -89,12 +90,15 @@ const getUserById = async (req, res) => {
   }
 }
 const updateUserById = async (req, res) => {
-  const { _id, userUpdated } = req.body
+  const { _id } = req.params
+  const id=_id
+  const  userUpdated =req.body 
+  console.log('req.body  ',req.body ) 
   try {
-    const resp = await User.findByIdAndUpdate(_id, userUpdated, { new: true })
+    const resp = await User.findByIdAndUpdate(id, userUpdated, { new: true })
     if (resp) {
       return res.status(200).json({
-        messege: 'updateUserById: ok',
+        message: 'updateUserById: ok',
         detail: resp
       })
     }
@@ -146,7 +150,7 @@ const deleteUserById = async (req, res) => {
     const resp = await User.findByIdAndDelete(_id)
     if (resp) {
       return res.status(200).json({
-        messege: 'deleteUserById: OK',
+        message: 'deleteUserById: OK',
         detail: resp
       })
     }
