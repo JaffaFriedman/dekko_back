@@ -25,7 +25,27 @@ const getProduct = async (req, res) => {
     })
   }
 }
-
+const getProductById = async (req, res) => {
+  const { _id } = req.params
+  try {
+     const product = await Product.findById( _id )
+    if (product) {
+        return res.status(200).json({
+        message: 'getProductById: Encontrado',
+        detail: product
+      })
+    }
+    return res.status(404).json({
+      message: 'getProductById: Not found'
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'getProductById: Server Error',
+      error
+    })
+  }
+}
 module.exports = {
-  getProduct
+  getProduct,
+  getProductById
 }
