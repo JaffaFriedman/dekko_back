@@ -70,7 +70,6 @@ const getUsers = async (req, res) => {
 }
 const getUserById = async (req, res) => {
   const { _id } = req.params
-  console.log(_id)
   try {
      const user = await User.findById( _id )
     if (user) {
@@ -130,6 +129,7 @@ const login = async (req, res) => {
       return res.status(200).json({
         message: 'login: User logged in successfully',
         idUser: userValidated._id,
+        userName: userValidated.nombre,
         token
       })
     } else {
