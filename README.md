@@ -2,57 +2,43 @@
 
 Este proyecto consiste en una aplicación para una tienda real de papel mural y cortinas, la idea hacer uso de distintas herramientas.
 
-La aplicación esta dividida en un modulo para el frontend y otro para el backend:
+![image](https://github.com/JaffaFriedman/dekko_front/assets/112987800/1a8a72dc-2f25-4454-b429-60115c8c86f7)
 
-## Aplicación FrontEnd
+# Aplicación FrontEnd
 
-La aplicación cuenta con paginas para el cliente final y una sección de administración.
+![image](https://github.com/JaffaFriedman/dekko_front/assets/112987800/cdc6fd47-7c22-42da-bc64-6298568b7ccc)
 
-## Aplicación Backend
-Esta aplicación permite interactuar con la base de datos mongodb que contiene los datos de los productos, clientes y sus compras.
 
 # Aplicación Backend
-### Sección para el cliente final
+![image](https://github.com/JaffaFriedman/dekko_front/assets/112987800/62b240fe-1771-4343-9557-0fe746d64ebb)
 
-Este sitio tiene las siguientes paginas para el cliente final:
+# MongoDB
+![image](https://github.com/JaffaFriedman/dekko_front/assets/112987800/42813662-ccfe-4c28-9eff-82b9c315f609)
 
-Home con un carusel.
-Nostros con una reseña y una lista de imagenes tipo quilt.
-Tiene un catalogo que permite seleccionar las diferentes categorias de productos. La aplicación se comporta diferente en cada una de ellas:
-Murales a Medida, el cliente elige la imagen, textura de papel y entrega sus medidas.
-Papel de constructora, aca hay 2 opciones por bobinas o metros cuadrados.
-Papel mural importado en rollos.
-Cortinas, el cliente elige el tipo, la tela y entrega sus medidas.
-Cada categoria tiene una vista para agregar al carrito
-Hay una vista del carro de compra que permite pagar
-Inicio de Sesión con opción de registro y olvido de clave
-Contacto para dejar un mensaje.
 
-### Sección de administración
+# Detalle de la Aplicación FrontEnd
+ 
+## Conexion del usuario
+##### Si el usuario no esta conectado en el Navbar se puede conectar o registrar
+##### Si ya esta conectado puede desconextarse o ver/modificar su perfil
 
-Sección de administración que permite:
-Revisar las compras
-Revisar los productos
+![image](https://github.com/JaffaFriedman/dekko_front/assets/112987800/bf60a386-b2f1-4410-9d4f-6d791b145140)
+ 
 
-### Instalación
+## Catalogo de Productos
+#### Nostros con una reseña y una lista de imagenes tipo quilt.
+#### Tiene un catalogo que permite seleccionar las diferentes familias de productos. La aplicación se comporta diferente en cada una de ellas, por eso la vista del producto individual es diferente en cada una de ellas
+##### Murales a Medida, el cliente elige la imagen, textura de papel y entrega sus medidas.
+##### Papel mural importado en rollos.
+##### Papel de constructora que se vende por bobinas
+##### Papel de constructora que se vende por metro lineal
+##### Cortinas, el cliente elige el tipo, la tela y entrega sus medidas.
+ ![image](https://github.com/JaffaFriedman/dekko_front/assets/112987800/a0533b12-7260-4bf4-b347-3cad586e1287)
 
-Para crear la aplicacion usamos
-npx create-react-app dekko_front
 
-y luego instalamos las siguientes librerias con npm:
+## Footer
+#### Contacto para dejar un mensaje.
+#### Garantias
+#### Sobre Nosotros
+#### Como instalar los papeles
 
-npm i cors 
-##### 
-npm i dotenv
-#####  
-npm i express
-#####  
-npm i express-jwt 
-##### 
-npm i jsonwebtoken 
-##### 
-npm i mongoose 
-
-### Deploy
-
-Las aplicaciones se subieron a github y se uso Netlify para el deployment.
