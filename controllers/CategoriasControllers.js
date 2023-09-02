@@ -14,6 +14,8 @@ const getCategorias = async (req, res) => {
 
 const getCategoria = async (req, res) => {
   try {
+   // const categoria = await Categoria.find({familia : req.params.familia}
+    
    const categoria = await Categoria.find({familia : req.params.familia})
     if (categoria) {
       return res.status(200).json({
@@ -32,32 +34,8 @@ const getCategoria = async (req, res) => {
     })
   }
 }
-const getCategoriaByName = async (req, res) => {
-  try {
-    const categoria = await Categoria.findOne({
-      familia: req.params.familia,
-      categoria: req.params.categoria
-    })
-    if (categoria) {
-      return res.status(200).json({
-        message: 'getCategoriaByName: Encontrada',
-        info: categoria
-      })
-    }
-    return res.status(404).json({
-      message: 'getCategoriaByName: No encontrada'
-    })
-
-  } catch (error) {
-    return res.status(500).json({
-      message: 'getCategoriaByName: Internal Server Error',
-      error
-    })
-  }
-}
 
 module.exports = {
   getCategorias,
-  getCategoria,
-  getCategoriaByName
+  getCategoria
 }
